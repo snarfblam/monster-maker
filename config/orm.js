@@ -34,8 +34,9 @@ var _colFunction = function (colName) {
 
 /** Accepts a string in the form of 'columnName' or 'tableName.columnName'. */
 var col = function (name) {
+    // May need to split it into table and column names. mysql package won't accept them in one string.
     var table = null;
-    var col = name;
+    var col = name; // But if only a column is specified, we're already good to go
 
     var parts = name.split('.');
     if (parts.length > 2) throw Error('Invalid column name: ' + name);
@@ -193,6 +194,14 @@ function OrmQuery() {
     /** Performs a left join. 'table' may be a string or an orm.table object. */
     OrmQuery.prototype.leftJoin = function (table) {
         this.sql += " LEFT JOIN ";
+        this._appendTable(table);
+
+        return this;
+    };
+    
+    /** Performs a left join. 'table' may be a string or an orm.table object. */
+    OrmQuery.prototype.innerJoin = function (table) {
+        this.sql += " INNER JOIN ";
         this._appendTable(table);
 
         return this;
