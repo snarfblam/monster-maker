@@ -1,4 +1,6 @@
 var orm = require('../config/orm');
+var monster = require('./monster');
+
 
 var party = {
     /** Returns a promise that resolves to an array of party objects. */
@@ -11,6 +13,46 @@ var party = {
     getById: function (id) {
         return orm.select().from('parties').whereEquals('id', id).then(results => {
             return results[0];
+        });
+    },
+
+    /** Returns a promise that resolves to {party, monsters[]}, or undefined if not found. */
+    getWithMonsters: function (id, excludeInactive) {
+        var query = orm.select(
+            'partyId',
+            'head',
+            'body',
+            'eyes',
+            'active',
+            'monsters.name',
+            'monsters.id',
+            orm.as('parties.name', 'partyName'))
+            .from('parties')
+            .innerJoin('monsters')
+            .onEquals('monsters.partyID', 'parties.id');
+        if (excludeInactive) {
+            query.whereEquals('active', 1);
+        }
+        
+        return query.then(data => {
+            if (data.length == 0) return undefined;
+
+            var result = {
+                party: {
+                    name: data[0].partyName,
+                },
+                monsters: [],
+            }
+
+            data.forEach(row => {
+                // Duplicate row and remove the party name and we have a monster
+                var monster = Object.assign({}, row);
+                delete monster["partyName"];
+
+                result.monsters.push(monster);
+            });
+
+            return result;
         });
     },
 
