@@ -32,10 +32,20 @@ var _colFunction = function (colName) {
     return this;
 }
 
+/** Accepts a string in the form of 'columnName' or 'tableName.columnName'. */
 var col = function (name) {
+    var table = null;
+    var col = name;
+
+    var parts = name.split('.');
+    if (parts.length > 2) throw Error('Invalid column name: ' + name);
+    if (parts.length == 2) {
+        table = parts[0];
+        col = parts[1];
+    }
     return {
-        _tablename: null,
-        _colname: name,
+        _tablename: table,
+        _colname: col,
         _asname: null,
         as: _asFunction,
     };
@@ -75,6 +85,24 @@ function OrmQuery() {
             }
         }
     };
+
+    OrmQuery.prototype._appendTable = function (table) {
+        if (typeof table == 'string') {
+            this.sql += "?? ";
+            this.values.push(table);
+        } else {
+            if (table._colname) throw Error("Extraneous column name: " + table._colname);
+            if (!table._tablename) throw Error("Table name not specified.");
+            this.sql += "?? ";
+            this.values.push(table._tablename);
+
+            if (table._asname) {
+                this.sql += "AS ?? ";
+                this.values.push(table._asname);
+            }
+        }
+    };
+
 
     OrmQuery.prototype.select = function () {
         var args = arguments;
@@ -137,7 +165,7 @@ function OrmQuery() {
             this.values.push(rowValues[name]);
         });
 
-        this.sql += ")";
+        this.sql += ") ";
 
         return this;
     };
@@ -151,7 +179,7 @@ function OrmQuery() {
 
         var first = true;
         names.forEach(name => {
-            this.sql += first ? ("?? = ?") : (", ?? = ?");
+            this.sql += first ? ("?? = ? ") : (", ?? = ? ");
             first = false;
 
             this.values.push(name);
@@ -161,6 +189,25 @@ function OrmQuery() {
 
         return this;
     };
+
+    /** Performs a left join. 'table' may be a string or an orm.table object. */
+    OrmQuery.prototype.leftJoin = function (table) {
+        this.sql += " LEFT JOIN ";
+        this._appendTable(table);
+
+        return this;
+    };
+
+    /** Specifies an ON clause, where each column may be a string or an orm.table.col 
+      * object or an orm.col object. */
+    OrmQuery.prototype.onEquals = function (colA, colB) {
+        this.sql += " ON ";
+        this._appendCol(colA);
+        this.sql += " = ";
+        this._appendCol(colB);
+
+        return this;
+    }
 
     OrmQuery.prototype.run = function () {
         return connection.query(this.sql, this.values);
