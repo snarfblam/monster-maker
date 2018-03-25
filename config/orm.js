@@ -13,6 +13,11 @@ var insertInto = function (table, values) {
     return query.insertInto(table, values);
 }
 
+var update = function (table, values) {
+    var query = new OrmQuery();
+    return query.update(table, values);
+}
+
 function OrmQuery() {
     this.sql = "";
     this.values = [];
@@ -89,7 +94,6 @@ function OrmQuery() {
         var names = Object.keys(rowValues);
         if (names.length == 0) throw Error("No values specified.");
 
-        this.sql += " (";
         var first = true;
         names.forEach(name => {
             this.sql += first ? ("?? = ?") : (", ?? = ?");
@@ -121,6 +125,7 @@ function OrmQuery() {
 module.exports = {
     select: select,
     insertInto: insertInto,
+    update: update,
     connect: function () {
         return connection.connect();
     }
