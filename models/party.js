@@ -26,6 +26,7 @@ var party = {
             'active',
             'monsters.name',
             'monsters.id',
+            'habitat',
             orm.as('parties.name', 'partyName'))
             .from('parties')
             .innerJoin('monsters')
@@ -40,14 +41,16 @@ var party = {
             var result = {
                 party: {
                     name: data[0].partyName,
+                    habitat: data[0].habitat,
                 },
                 monsters: [],
             }
 
             data.forEach(row => {
-                // Duplicate row and remove the party name and we have a monster
+                // Duplicate row and remove the party columns and we have a monster
                 var monster = Object.assign({}, row);
                 delete monster["partyName"];
+                delete monster["habitat"];
 
                 result.monsters.push(monster);
             });
