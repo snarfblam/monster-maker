@@ -6,7 +6,8 @@ var monster = {
         return orm.select().from('monsters').run();
     },
 
-    /** Returns a promise that resolves with a monster object */
+    /** Returns a promise that resolves with a monster object or undefined
+      * if the object is not found.     */
     getById: function (id) {
         return orm.select().from('monsters').whereEquals("id", id).then(result => {
             return result[0];
