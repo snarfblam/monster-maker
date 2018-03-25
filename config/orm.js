@@ -3,6 +3,9 @@ var mysql = require('mysql');
 
 var connection = new MonsterDbConnection();
 
+/** Accepts an array or argument list where each item is either a 
+  * string or orm.table.col object or orm.col object specifying a
+  * column to select. */
 var select = function () {
     var query = new OrmQuery();
     return query.select(Array.prototype.slice.call(arguments));
@@ -11,17 +14,68 @@ var select = function () {
 var insertInto = function (table, values) {
     var query = new OrmQuery();
     return query.insertInto(table, values);
-}
+};
 
 var update = function (table, values) {
     var query = new OrmQuery();
     return query.update(table, values);
+};
+
+
+var _asFunction = function (asName) {
+    this._asname = asName;
+    return this;
+}
+
+var _colFunction = function (colName) {
+    this._colname = colName;
+    return this;
+}
+
+var col = function (name) {
+    return {
+        _tablename: null,
+        _colname: name,
+        _asname: null,
+        as: _asFunction,
+    };
+};
+
+var table = function (name) {
+    return {
+        _tablename: name,
+        _colname: null,
+        _asname: null,
+        as: _asFunction,
+        col: _colFunction,
+    };
 }
 
 function OrmQuery() {
     this.sql = "";
     this.values = [];
 } { // Methods
+    OrmQuery.prototype._appendCol = function (col) {
+        if (typeof col == 'string') {
+            this.sql += "?? ";
+            this.values.push(col);
+        } else {
+            if (col._tablename) {
+                this.sql += "??.";
+                this.values.push(col._tablename);
+            }
+
+            if (!col._colname) throw Error("Column name not specified.");
+            this.sql += "?? ";
+            this.values.push(col._colname);
+
+            if (col._asname) {
+                this.sql += "AS ?? ";
+                this.values.push(col._asname);
+            }
+        }
+    };
+
     OrmQuery.prototype.select = function () {
         var args = arguments;
         if (arguments.length == 1 && Array.isArray(arguments[0])) args = arguments[0];
@@ -29,12 +83,13 @@ function OrmQuery() {
         if (args.length == 0) {
             this.sql += "SELECT * ";
         } else {
-            this.sql = "SELECT ??";
-            this.values.push(args[0]);
+            this.sql = "SELECT ";
 
-            for (var i = 1; i < args.length; i++) {
-                this.sql += ", ??"
-                this.values.push(args[i]);
+            for (var i = 0; i < args.length; i++) {
+                if (i != 0) this.sql += ", ";
+                // this.sql += "?? "
+                // this.values.push(args[i]);
+                this._appendCol(args[i]);
             }
         }
 
@@ -126,6 +181,8 @@ module.exports = {
     select: select,
     insertInto: insertInto,
     update: update,
+    table: table,
+    col: col,
     connect: function () {
         return connection.connect();
     }
