@@ -62,6 +62,16 @@ var table = function (name) {
     };
 }
 
+var as = function (column, name) {
+    if (typeof column == 'string') {
+        return col(column).as(name);
+    } else if (column.as) {
+        return column.as(name);
+    } else {
+        throw Error("Invalid column or table value: " + column);
+    }
+}
+
 function OrmQuery() {
     this.sql = "";
     this.values = [];
@@ -254,6 +264,7 @@ module.exports = {
     update: update,
     table: table,
     col: col,
+    as: as,
     connect: function () {
         return connection.connect();
     }
