@@ -66,10 +66,21 @@ function OrmQuery() {
     this.sql = "";
     this.values = [];
 } { // Methods
-    OrmQuery.prototype._appendCol = function (col) {
+    OrmQuery.prototype._appendCol = function (col, disallowDot) {
         if (typeof col == 'string') {
-            this.sql += "?? ";
-            this.values.push(col);
+            var parts = col.split('.');
+            if (parts.length == 1) {
+                this.sql += "?? ";
+                this.values.push(col);
+            } else if (parts.length == 2) {
+                if (disallowDot) throw Error("Invalid column string format: " + col);
+                this.sql += "??.??";
+                this.values.push(parts[0]);
+                this.values.push(parts[1]);
+                
+            } else {
+                throw Error("Invalid column string format: " + col);
+            } 
         } else {
             if (col._tablename) {
                 this.sql += "??.";
@@ -133,8 +144,12 @@ function OrmQuery() {
     };
 
     OrmQuery.prototype.whereEquals = function (column, value) {
-        this.sql += " where ?? = ?";
-        this.values.push(column);
+        // this.sql += " where ?? = ?";
+        // this.values.push(column);
+        // this.values.push(value);
+        this.sql += " WHERE ";
+        this._appendCol(column);
+        this.sql += " = ?";
         this.values.push(value);
 
         return this;
