@@ -3,5 +3,5 @@
     "port": 3306,
     "user": "root",
     "password": "sequelitis",
-    "database": "monster_db"
+    "database": "monsters_db"
 }

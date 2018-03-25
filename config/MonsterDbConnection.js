@@ -1,5 +1,5 @@
 var mysql = require('mysql');
-var connectionConfig = require('./db.json');
+var connectionConfig = require('./monsterDbConfig');
 
 function MonsterDbConnection() {
     this.connection = mysql.createConnection(connectionConfig);
@@ -54,3 +54,5 @@ function MonsterDbConnection() {
         });
     };
 }
+
+module.exports = MonsterDbConnection;
