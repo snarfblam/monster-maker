@@ -49,7 +49,7 @@ function OrmQuery() {
         this.values.push(value);
 
         return this;
-    }
+    };
 
     OrmQuery.prototype.insertInto = function (table, rowValues) {
         this.sql = "INSERT INTO ??";
@@ -61,12 +61,8 @@ function OrmQuery() {
         this.sql += " (";
         var first = true;
         names.forEach(name => {
-            if (first) {
-                this.sql += "??";
-                first = false;
-            } else {
-                this.sql += ", ??";
-            }
+            this.sql += first ? ('??') : (', ??');
+            first = false;
 
             this.values.push(name);
         });
@@ -75,12 +71,8 @@ function OrmQuery() {
 
         first = true;
         names.forEach(name => {
-            if (first) {
-                this.sql += "?";
-                first = false;
-            } else {
-                this.sql += ", ?";
-            }
+            this.sql += first ? ('?') : (', ?');
+            first = false;
 
             this.values.push(rowValues[name]);
         });
@@ -88,11 +80,32 @@ function OrmQuery() {
         this.sql += ")";
 
         return this;
-    }
+    };
+
+    OrmQuery.prototype.update = function (table, rowValues) {
+        this.sql = "UPDATE ?? SET ";
+        this.values.push(table);
+
+        var names = Object.keys(rowValues);
+        if (names.length == 0) throw Error("No values specified.");
+
+        this.sql += " (";
+        var first = true;
+        names.forEach(name => {
+            this.sql += first ? ("?? = ?") : (", ?? = ?");
+            first = false;
+
+            this.values.push(name);
+            this.values.push(rowValues[name]);
+
+        });
+
+        return this;
+    };
 
     OrmQuery.prototype.run = function () {
         return connection.query(this.sql, this.values);
-    }
+    };
 
     OrmQuery.prototype.then = function (cbSuccess, cbError) {
         if (cbError) {
