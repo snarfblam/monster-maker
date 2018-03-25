@@ -20,7 +20,7 @@ INSERT INTO `monsters_db`.`monsters` (
 );
 
 INSERT INTO `monsters_db`.`parties` (
-    `id`, `name`
+    `id`, `name`, `habitat`
 ) VALUES (
-    '1', 'Sample party'
+    '1', 'Sample party', '0'
 );
