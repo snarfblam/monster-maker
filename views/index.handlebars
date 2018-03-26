@@ -1,1 +1,49 @@
-<h2>Sorry. Nothing here yet.</h2>
+<div class="content-wrapper">
+
+    <div class="monster-maker panel">
+        <select class="party-picker">
+            {{#each parties}} {{>partyOption}} {{/each}}
+            <option>Create a new party...</option>
+        </select>
+
+        <div class="builder-label outline">Creating New Monster</div>
+        <div class="part-picker-box">
+            <div class="part-picker">
+                <button class="part-picker-left cycle-button" id="eye-prev">&lt;</button>
+                <div class="part-picker-label outline">Eyes</div>
+                <button class="part-picker-right cycle-button" id="eye-next">&gt;</button>
+            </div>
+            <div class="part-picker">
+                <button class="part-picker-left cycle-button" id="head-prev">&lt;</button>
+                <div class="part-picker-label outline">Head</div>
+                <button class="part-picker-right cycle-button" id="head-next">&gt;</button>
+            </div>
+            <div class="part-picker">
+                <button class="part-picker-left cycle-button" id="body-prev">&lt;</button>
+                <div class="part-picker-label outline">Body</div>
+                <button class="part-picker-right cycle-button" id="body-next">&gt;</button>
+            </div>
+        </div>
+        <div class="builder-preview">
+            <div class="builder-monster-view"></div>
+            <div class="builder-monster-view-label">Name Here</div>
+        </div>
+        <button class="builder-submit cycle-button">CREATE</button>
+    </div>
+
+    <div class="party-view-box panel">
+        <div class='preview-label'>Your Party</div>
+        <button class="scene-picker-left scene-picker cycle-button">&lt;</button>
+        <div class='party-scene'>
+            <img src='/assets/mon-habitat/plains.png' class='party-backdrop'>
+            <div class="party-monster monster-1"></div>
+            <div class="party-monster monster-2"></div>
+            <div class="party-monster monster-3"></div>
+            <div class="party-monster monster-4"></div>
+        </div>
+        <button class="scene-picker-left scene-picker cycle-button">&gt;</button>
+    </div>
+</div>
+<script>
+    var partyData = {{{ toJSON monsters }}};
+</script>

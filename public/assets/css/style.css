@@ -1,0 +1,241 @@
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P');
+
+* {
+    box-sizing: border-box;
+}
+html {
+    box-sizing: border-box;
+}
+body {
+    /* background: url('../images/dramatic-sky.png') no-repeat center center fixed; */
+    /* background-size: cover; */
+    background: url('../images/dramatic-sky.png') center repeat-x fixed;
+    background-size: auto 100%;
+    color: white;
+    font-family: 'Press Start 2P';
+    /* font-size: 12px; */
+    margin: 0px;
+}
+
+.outline {
+    text-shadow: 
+        -1px -1px 0px black,
+        1px -1px 0px black,
+        -1px 1px 0px black,
+        1px 1px 0px black
+    ;
+}
+
+.title-banner {
+    width: 100%;
+    margin: 0;
+    text-align: center;
+    background: rgba(0,0,0,0.5);
+    padding: 1rem;
+
+    color: #A4A;
+    text-shadow: 
+    -2px -2px 0px black,
+    2px -2px 0px black,
+    -2px 2px 0px black,
+    2px 2px 0px black,
+    3px -1px 0px #111,
+    -1px 3px 0px #111,
+    3px 3px 0px #111,
+    4px 0px 0px #222,
+    0px 4px 0px #222,
+    4px 4px 0px #222,
+    5px 1px 0px #333,
+    1px 5px 0px #333,
+    5px 5px 0px #333,
+    6px 2px 0px #000,
+    2px 6px 0px #000,
+    6px 6px 0px #000
+;
+}
+
+
+
+
+
+.content-wrapper {
+    width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2rem;
+}
+
+.cycle-button {
+    display: inline;
+    background: rgba(0,0,0,.5);
+    border-radius: 8px;
+    font-family: inherit;
+    color: white;
+    border: solid 1px rgba(255, 255, 255, 0.3);
+    padding-top: 0.25em;
+    padding-bottom: 0.25em;
+    box-sizing: border-box;
+}
+
+.cycle-button:hover {
+    border: solid 1px rgba(255, 255, 255, 0.5);
+}
+.cycle-button:focus {
+    box-shadow: 0px 0px 3px 1px rgba(100, 149, 237, 0.75);
+    outline: none;
+}
+.cycle-button:active {
+    transform: translate(1px, 1px);
+}
+
+
+.monster-maker {
+    display: inline-block;
+    width: 470px;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 10px;
+    vertical-align: top;
+    height: 350px;
+    text-align: center;
+}
+
+.party-view-box {
+    display: inline-block;
+    width: 470px;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 10px;
+    vertical-align: top;
+}
+
+.panel {
+    /* background: rgba(0, 0, 0, 0.5); */
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid black;
+    border-radius: 8px;
+    /* box-shadow: 10px 10px 10px rgba(0, 0, 0, .33), 0px 0px 5px 1px rgba(0, 0, 0, 0.5) inset; */
+}
+
+.part-picker {
+    display: block;
+}
+
+.part-picker-left,
+.part-picker-right {
+    vertical-align: text-bottom;
+
+}
+.part-picker-label {
+    display: inline-block;
+    width: 100px;
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
+
+}
+
+.part-picker-box {
+    display: inline-block;
+    text-align: center;
+}
+.builder-preview {
+    background: rgba(0, 0, 0, .8);
+    border: 2px solid white;
+    display: inline-block;
+    width: 200px;
+    height: 220px;
+    vertical-align: middle;
+    text-align: center;
+}
+.builder-monster-view {
+    width: 200px;
+    height: 200px;
+    margin: 0;
+    display: block;
+}
+.builder-monster-view-label {
+    font-size: 0.7em;
+}
+
+.builder-submit {
+    margin-top: 20px;
+    padding-top: 4px;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+.builder-label,
+.preview-label {
+    width: 100%;
+    text-align: center;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.party-picker {
+    appearance: none;
+    display: block;
+    margin: 0 auto 1rem auto;
+    width: 300px;
+    background: black;
+    color: white;
+    font-family: inherit;
+    font-size: 0.8rem;
+    padding: 8px;
+}
+
+.party-picker option {
+    font-family: sans-serif;
+}
+
+.party-view-box {
+    height: 350px;
+    text-align: center;
+}
+
+.party-scene {
+    display: inline-block;
+    position: relative;
+}
+.party-scene img {
+    border: 2px solid white;
+    outline: 2px solid black;
+    outline-offset: 0px;
+    vertical-align: middle;
+}
+
+.scene-picker {
+    vertical-align: middle;
+    height: 100px;
+}
+
+.party-monster {
+    width: 80px;
+    height: 100px;
+    position: absolute;
+    top: 140px;
+}
+
+.monster-1 {
+    left: 0px;
+}
+.monster-2 {
+    left: 80px;
+}
+.monster-3 {
+    left: 160px;
+}
+.monster-4 {
+    left: 240px;
+}
+
+.monster-container {
+    position: relative;
+}
+.monster-body,
+.monster-head,
+.monster-eye-1,
+.monster-eye-2 {
+    position: absolute;
+}
