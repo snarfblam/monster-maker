@@ -45,11 +45,34 @@ router.get('/', function (req, res) {
 //     });
 // });
 
+/** API endpoint to add a monster to a party 
+ * 
+ * return: { result: 'added' | 'error', error?: string}
+*/
 router.post('/api/monster/', function (req, res) {
     var monsterData = req.body;
     console.log(monsterData);
-    res.send(200).end();
-    // res.send(404).end();
+
+    if (!monster.validate(monsterData) || monster.hasOwnProperty('id')) {
+        res.json({
+            result: 'error', error: 'Invalid monster data',
+        });
+        return;
+    }
+
+    party.getWithMonsters().then(data => {
+        var count = data.monsters.length;
+        if (count >= 4) {
+            res.json({ result: 'error', error: 'party at capacity' });
+        } else {
+            monster.create(monsterData).then(function () {
+                res.json({ result: 'added' });
+            });
+        }
+    }).catch(err => {
+        console.log(err);
+        res.json({ result: 'error', error: 'runtime error' });
+    });
 });
 
 module.exports = router;
