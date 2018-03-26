@@ -482,6 +482,20 @@ function displayPartyData() {
     });
 
     $('.builder-submit').on('click', function () {
-         
+        var monster = app.builder.monsterToEdit;
+        monster.head = app.builder.head;
+        monster.body = app.builder.body;
+        monster.eyes = app.builder.eyes;
+
+        $.ajax({
+            url: '/api/monster',
+            method: 'POST',
+            data: monster,
+        }).then(function (response) {
+            console.log(response);
+        }).catch(function (err) {
+            console.log(err);
+            alert('An error occurred submitting the request: ' + err.status);
+        });
     });
 }

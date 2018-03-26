@@ -39,10 +39,17 @@ router.get('/', function (req, res) {
     });
 });
 
-router.get('api/parties', function (req, res) {
-    party.getAll().then(partyData => {
+// router.get('api/parties', function (req, res) {
+//     party.getAll().then(partyData => {
 
-    });
+//     });
+// });
+
+router.post('/api/monster/', function (req, res) {
+    var monsterData = req.body;
+    console.log(monsterData);
+    res.send(200).end();
+    // res.send(404).end();
 });
 
 module.exports = router;
