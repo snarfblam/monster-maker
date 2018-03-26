@@ -5,6 +5,8 @@ var monster = require('../models/monster');
 var router = express.Router();
 
 router.get('/', function (req, res) {
+    var partyId = null;
+    
     // get party list and pre-render sample (or whatever the first may be) party
     var partyList;
     var selectedParty;
@@ -14,7 +16,8 @@ router.get('/', function (req, res) {
     party.getAll().then(partyData => {
         partyList = partyData;
         selectedParty = partyList[0];
-        return party.getWithMonsters(selectedParty.id);
+        partyId = partyId || selectedParty.id;
+        return party.getWithMonsters(partyId);
     }).then(partyMonsterData => {
         partyMonsterData.monsters.forEach(mon => {
             if (mon.active) {
@@ -25,13 +28,20 @@ router.get('/', function (req, res) {
         });
 
         res.render('index', {
+            currentParty: partyId,
             parties: partyList,
             monsters: partyMonsterData.monsters,
         });
-        // render here
     }).catch(err => {
-
+        console.log("ERROR RENDERING INDEX: ", err);
+        res.render('error');
         // error response here (or 200 with there-was-a-problem notification)
+    });
+});
+
+router.get('api/parties', function (req, res) {
+    party.getAll().then(partyData => {
+
     });
 });
 
