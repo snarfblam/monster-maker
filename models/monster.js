@@ -37,6 +37,16 @@ var monster = {
 
         return orm.update('monsters', monster).whereEquals('id', monster.id).run();
     },
+
+    /** Returns a boolean indicating whether the object is a valid monster. */
+    validate: function (monster, requireId) {
+        var properties = ['head', 'body', 'eyes', 'partyId', 'name', 'active'];
+        properties.forEach(p => {
+            if (!monser.hasOwnProperty(p)) return false;
+        });
+
+        return true;
+    }
 }
 
 module.exports = monster;
