@@ -5,6 +5,9 @@ var app = new (function () {
         head: 0,
         eyes: 0,
     };
+    this.partyInfo = {
+        activeMemberCount: 0,
+    }
 
     function point(x, y) {
         return { x: x, y: y };
@@ -448,6 +451,39 @@ $('#body-next').on('click', function () {
     app.updateMonsterContainer(container, app.builder);
 })
 
+// Render party members
+var partyMembers = [
+    { element: $('.monster-1'), container: null },
+    { element: $('.monster-2'), container: null },
+    { element: $('.monster-3'), container: null },
+    { element: $('.monster-4'), container: null },
+];
+
+partyMembers.forEach(item => {
+    item.container = app.createMonsterContainer();
+    item.element.append(item.container);
+});
+
+// partyData is inserted into the rendered HTML
+var iContainer = 0;
+if (partyData && partyData.forEach) {
+    partyData.forEach(monster => {
+        if (monster.active) {
+            if (iContainer < 4) {
+                app.updateMonsterContainer(partyMembers[iContainer].container, monster);
+
+                iContainer++;
+            }
+            app.partyInfo.activeMemberCount++;
+        } else {
+            // todo: create and update container in inactive monster section
+        }
+    });
+}
+
+if (app.partyInfo.activeMemberCount >= 4) {
+    $('.builder-submit').prop('disabled', true);
+}
 
 function onMonsterChanged() {
     var monster = { head: $('#nudHead').val(), body: $('#nudBody').val(), eyes: $('#nudEyes').val() };

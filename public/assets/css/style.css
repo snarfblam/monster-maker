@@ -164,6 +164,12 @@ body {
     padding-left: 50px;
     padding-right: 50px;
 }
+.builder-submit:disabled {
+    color: rgba(255, 255, 255, 0.2);
+}
+.builder-submit:hover:disabled {
+    border-color: rgba(255, 255, 255, 0.3);
+}
 
 .builder-label,
 .preview-label {
@@ -198,7 +204,7 @@ body {
     display: inline-block;
     position: relative;
 }
-.party-scene img {
+.party-scene .party-backdrop {
     border: 2px solid white;
     outline: 2px solid black;
     outline-offset: 0px;
@@ -233,6 +239,11 @@ body {
 .monster-container {
     position: relative;
 }
+
+.party-monster .monster-container {
+    transform: scale(0.75);
+}
+
 .monster-body,
 .monster-head,
 .monster-eye-1,
