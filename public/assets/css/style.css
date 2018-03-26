@@ -209,6 +209,39 @@ body {
     outline: 2px solid black;
     outline-offset: 0px;
     vertical-align: middle;
+    width: 324px;
+}
+
+.party-management-panel {
+    width: 324px;
+    clear: both;
+    padding-top: 10px;
+    font-size: 0.5rem;
+    margin: 0 auto;
+}
+
+.party-management-group {
+    width: 80px;
+    display: inline-block;
+}
+
+.party-link {
+    text-decoration: none;
+    color: white;
+}
+.party-link:hover {
+    text-decoration: underline;
+}
+.party-link:focus {
+    text-decoration: underline;
+}
+
+.party-retire {
+    color: red;
+}
+
+.party-link.hidden {
+    display: none;
 }
 
 .scene-picker {

@@ -4,6 +4,10 @@ var app = new (function () {
         body: 0,
         head: 0,
         eyes: 0,
+        /** 'create' or 'edit' */
+        mode: "create",
+        /** monster object to be updated if mode == 'edit' */
+        monsterToEdit: null,
     };
     this.partyInfo = {
         activeMemberCount: 0,
@@ -271,7 +275,15 @@ var app = new (function () {
         container.append($('<img>').addClass('monster-eye-2'));
         return container[0];
     }
-    // this.position = function (headElement, bodyElement, eye1Element, eye2Element, monster) {
+
+    this.clearMonsterContainer = function (containerElement) {
+        var $container = $(containerElement);
+        $container.find('.monster-head').attr('src', '');
+        $container.find('.monster-body').attr('src', '');
+        $container.find('.monster-eye-1').attr('src', '');
+        $container.find('.monster-eye-2').attr('src', '');
+    }
+
     this.updateMonsterContainer = function (containerElement, monster) {
         var imgDir = "assets/mon-img/";
         var bodyPart = this.bodies[monster.body];
@@ -338,155 +350,138 @@ var app = new (function () {
                 display: "none",
             });
         }
-        //     var imgDir = "assets/mon-img/";
-        //     var bodyPart = this.bodies[monster.body];
-        //     var headPart = this.heads[monster.head];
-        //     var eyePart = this.eyes[monster.eyes];
 
-        //     var $headElement = $(headElement);
-        //     var $bodyElement = $(bodyElement);
-        //     var $eye1Element = $(eye1Element);
-        //     var $eye2Element = $(eye2Element);
-
-        //     var headScale = bodyPart.scale / headPart.scale;
-        //     var eyeScale = headScale / this.heads[monster.eyes].scale; // lazy--eye images have the same scale as head images
-
-        //     var offsetX = (bodyPart.mount.x - headPart.anchor.x) * headScale;
-        //     var offsetY = (bodyPart.mount.y - headPart.anchor.y) * headScale;
-
-        //     $headElement.css({
-        //         left: offsetX,
-        //         top: offsetY,
-        //         transform: "scale(" + headScale + ")",
-        //     });
-        //     $headElement.attr('src', imgDir + headPart.image);
-        //     $bodyElement.attr('src', imgDir + bodyPart.image);
-
-        //     var eye1 = null;
-        //     var eye2 = null;
-        //     var eyeMounts = headPart.mounts;
-
-        //     switch (headPart.eyeType) {
-        //         case "grouped":
-        //             eye1 = eyePart.grouped;
-        //             break;
-        //         case "both":
-        //             eye1 = eyePart.left;
-        //             eye2 = eyePart.right;
-        //             break;
-        //         case "right":
-        //             eye1 = eyePart.rightOnly;
-        //             break;
-        //     }
-
-        //     offsetX1 = offsetX + (eyeMounts[0].x * headScale - eye1.anchor.x * eyeScale)/headScale;
-        //     offsetY1 = offsetY + (eyeMounts[0].y * headScale - eye1.anchor.y * eyeScale)/headScale;
-        //     // eye 1
-        //     $eye1Element.css({
-        //         left: offsetX1,
-        //         top: offsetY1,
-        //         transform: "scale(" + eyeScale + ")",
-        //     });
-        //     $eye1Element.attr('src', imgDir + eye1.image)
-        //     if (eye2) {
-        //         offsetX2 = offsetX + (eyeMounts[1].x * headScale - eye2.anchor.x * eyeScale);
-        //         offsetY2 = offsetY + (eyeMounts[1].y * headScale - eye2.anchor.y * eyeScale);
-
-        //         $eye2Element.css({
-        //             display: "inline",
-        //             left: offsetX2,
-        //             top: offsetY2,
-        //             transform: "scale(" + eyeScale + ")",
-        //         });
-        //         $eye1Element.attr('src', imgDir + eye2.image)
-        //     } else {
-        //         $eye2Element.css({
-        //             display: "none",
-        //         });
-        //     }
     };
 })();
 
-$('#nudHead').on('click', onMonsterChanged);
-$('#nudBody').on('click', onMonsterChanged);
-$('#nudEyes').on('click', onMonsterChanged);
-
-
+// Set up builder UI
 var monsterView = $('.builder-monster-view');
-var container = app.createMonsterContainer();
-monsterView.append(container);
-var monster = {
-    head: 0, body: 0, eyes: 0,
-}
-app.updateMonsterContainer(container, monster);
+var builderContainer = app.createMonsterContainer();
+monsterView.append(builderContainer);
 
-$('#eye-prev').on('click', function () {
-    app.builder.eyes--;
-    if (app.builder.eyes < 0) app.builder.eyes = app.eyes.length - 1;
-    app.updateMonsterContainer(container, app.builder);
-})
-$('#eye-next').on('click', function () {
-    app.builder.eyes++;
-    if (app.builder.eyes >= app.eyes.length)  app.builder.eyes = 0;
-    app.updateMonsterContainer(container, app.builder);
-})
-$('#head-prev').on('click', function () {
-    app.builder.head--;
-    if (app.builder.head < 0) app.builder.head = app.heads.length - 1;
-    app.updateMonsterContainer(container, app.builder);
-})
-$('#head-next').on('click', function () {
-    app.builder.head++;
-    if (app.builder.head >= app.heads.length)  app.builder.head = 0;
-    app.updateMonsterContainer(container, app.builder);
-})
-$('#body-prev').on('click', function () {
-    app.builder.body--;
-    if (app.builder.body < 0) app.builder.body = app.bodies.length - 1;
-    app.updateMonsterContainer(container, app.builder);
-})
-$('#body-next').on('click', function () {
-    app.builder.body++;
-    if (app.builder.body >= app.bodies.length)  app.builder.body = 0;
-    app.updateMonsterContainer(container, app.builder);
-})
 
 // Render party members
-var partyMembers = [
-    { element: $('.monster-1'), container: null },
-    { element: $('.monster-2'), container: null },
-    { element: $('.monster-3'), container: null },
-    { element: $('.monster-4'), container: null },
+var partyMemberUi = [
+    { element: null, container: null, editLink: null, retireLink: null, monster: null },
+    { element: null, container: null, editLink: null, retireLink: null, monster: null },
+    { element: null, container: null, editLink: null, retireLink: null, monster: null },
+    { element: null, container: null, editLink: null, retireLink: null, monster: null },
 ];
 
-partyMembers.forEach(item => {
+partyMemberUi.forEach(function (item, index) {
+    item.element = $('.monster-' + (index + 1));
+    item.editLink = $('#party-edit-' + index);
+    item.retireLink = $('#party-retire-' + index);
+
     item.container = app.createMonsterContainer();
     item.element.append(item.container);
 });
 
-// partyData is inserted into the rendered HTML
-var iContainer = 0;
-if (partyData && partyData.forEach) {
-    partyData.forEach(monster => {
-        if (monster.active) {
-            if (iContainer < 4) {
-                app.updateMonsterContainer(partyMembers[iContainer].container, monster);
+displayPartyData();
+updateBuilder();
 
-                iContainer++;
+
+function updateBuilder() {
+    app.updateMonsterContainer(builderContainer, app.builder);
+
+    var submit = $('.builder-submit');
+
+    if (app.builder.mode == 'create') {
+        submit.prop('disabled', app.partyInfo.activeMemberCount >= 4);
+        submit.text('CREATE');
+    } else if (app.builder.mode == 'edit') {
+        submit.prop('disabled', false);
+        submit.text('UPDATE');
+    }
+}
+
+
+function displayPartyData() {
+    var iContainer = 0;
+    app.partyInfo.activeMemberCount = 0;
+
+    if (partyData && partyData.forEach) {
+        partyData.forEach(monster => {
+            if (monster.active) {
+                if (iContainer < 4) {
+                    app.updateMonsterContainer(partyMemberUi[iContainer].container, monster);
+                    partyMemberUi[iContainer].editLink.removeClass('hidden');
+                    partyMemberUi[iContainer].retireLink.removeClass('hidden');
+                    partyMemberUi[iContainer].monster = monster;
+                    iContainer++;
+                }
+                app.partyInfo.activeMemberCount++;
+            } else {
+                // todo: create and update container in inactive monster section
             }
-            app.partyInfo.activeMemberCount++;
-        } else {
-            // todo: create and update container in inactive monster section
-        }
+        });
+    }
+
+    for (var i = iContainer; i < 4; i++) {
+        app.clearMonsterContainer(partyMemberUi[iContainer].container);
+        partyMemberUi[i].editLink.addClass('hidden');
+        partyMemberUi[i].retireLink.addClass('hidden');
+    }
+
+    // if (app.partyInfo.activeMemberCount >= 4) {
+    //     $('.builder-submit').prop('disabled', true);
+    // }
+}
+
+
+
+{ // Event handlers
+    $('#eye-prev').on('click', function () {
+        app.builder.eyes--;
+        if (app.builder.eyes < 0) app.builder.eyes = app.eyes.length - 1;
+        app.updateMonsterContainer(builderContainer, app.builder);
     });
-}
 
-if (app.partyInfo.activeMemberCount >= 4) {
-    $('.builder-submit').prop('disabled', true);
-}
+    $('#eye-next').on('click', function () {
+        app.builder.eyes++;
+        if (app.builder.eyes >= app.eyes.length) app.builder.eyes = 0;
+        app.updateMonsterContainer(builderContainer, app.builder);
+    });
 
-function onMonsterChanged() {
-    var monster = { head: $('#nudHead').val(), body: $('#nudBody').val(), eyes: $('#nudEyes').val() };
-    // app.position($('#head-box')[0], $('#body-box')[0], $('#eye-box-1'), $('#eye-box-2'), monster);
-    app.updateMonsterContainer($('#test-container'), monster);
+    $('#head-prev').on('click', function () {
+        app.builder.head--;
+        if (app.builder.head < 0) app.builder.head = app.heads.length - 1;
+        app.updateMonsterContainer(builderContainer, app.builder);
+    });
+
+    $('#head-next').on('click', function () {
+        app.builder.head++;
+        if (app.builder.head >= app.heads.length) app.builder.head = 0;
+        app.updateMonsterContainer(builderContainer, app.builder);
+    });
+
+    $('#body-prev').on('click', function () {
+        app.builder.body--;
+        if (app.builder.body < 0) app.builder.body = app.bodies.length - 1;
+        app.updateMonsterContainer(builderContainer, app.builder);
+    });
+
+    $('#body-next').on('click', function () {
+        app.builder.body++;
+        if (app.builder.body >= app.bodies.length) app.builder.body = 0;
+        app.updateMonsterContainer(builderContainer, app.builder);
+    });
+
+    $('.party-edit').on('click', function () {
+        var $this = $(this);
+        var index = $this.attr('data-index');
+
+        var monster = partyMemberUi[index].monster;
+        app.builder.monsterToEdit = monster;
+        app.builder.head = monster.head;
+        app.builder.body = monster.body;
+        app.builder.eyes = monster.eyes;
+        app.builder.mode = 'edit';
+
+        updateBuilder();
+    });
+
+    $('.builder-submit').on('click', function () {
+         
+    });
 }
