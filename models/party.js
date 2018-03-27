@@ -59,7 +59,7 @@ var party = {
         });
     },
 
-    /** Accepts a party object ({name: string}) without an id. Resolves when
+    /** Accepts a party object ({name: string, habitat: number}) without an id. Resolves when
      * the record is created. The party object will be updated with an id.     */
     create: function (party) {
         if (party.hasOwnProperty('id')) {
@@ -82,6 +82,13 @@ var party = {
 
         return orm.update('parties', party).whereEquals('id', party.id).run();
     },
+
+    validate: function (party, requireId) {
+        var valid = (typeof party.name == 'string') && (typeof party.habitat == 'number');
+        if (requireId) valid = valid && (typeof party.id == 'number');
+
+        return valid;
+    }
 };
 
 module.exports = party;

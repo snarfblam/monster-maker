@@ -235,10 +235,10 @@ body {
 .party-link:focus {
     text-decoration: underline;
 }
-
+/* 
 .party-retire {
     color: red;
-}
+} */
 
 .party-link.hidden {
     display: none;
