@@ -1,9 +1,9 @@
 
 var app = new (function () {
     this.builder = {
-        body: 0,
-        head: 0,
-        eyes: 0,
+        body: Math.floor(Math.random() * 8),
+        head: Math.floor(Math.random() * 8),
+        eyes: Math.floor(Math.random() * 8),
         /** 'create' or 'edit' */
         mode: "create",
         /** monster object to be updated if mode == 'edit' */
@@ -510,7 +510,7 @@ function hideModal() {
     });
 
     $(document).on("click", "select option", function () {
-        
+
     });
 
 
@@ -554,20 +554,31 @@ function hideModal() {
     });
 
     $('.builder-submit').on('click', function () {
-        var monster = {}; //app.builder.monsterToEdit;
-        monster.head = app.builder.head;
-        monster.body = app.builder.body;
-        monster.eyes = app.builder.eyes;
+        var monster = {
+            head: app.builder.head,
+            body: app.builder.body,
+            eyes: app.builder.eyes,
+            active: 1,
+            partyId: currentPartyId,
+            name: "Joshua",
+        }; 
 
         $.ajax({
             url: '/api/monster',
             method: 'POST',
             data: monster,
         }).then(function (response) {
-            console.log(response);
+            if (response.error) {
+                $('#modal-error-message').text("There was an error: " + response.error);
+                displayModal('.modal-content-error');
+                console.error(response);
+        } else {
+                location.reload();
+            }
         }).catch(function (err) {
             console.log(err);
-            alert('An error occurred submitting the request: ' + err.status);
+            $('#modal-error-message').text("There was an error: " + response.error);
+            displayModal('.modal-content-error');
         });
     });
 }

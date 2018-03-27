@@ -1,13 +1,13 @@
 <div class="content-wrapper">
 
-    <div class="monster-maker panel">
-        <select class="party-picker">
-            <option value="none" id="party-picker-none">(SELECT A PARTY)</option>
-            {{#each parties}} {{>partyOption}} {{/each}}
-            <option value="new">Create a new party...</option>
-        </select>
+    <select class="party-picker">
+        <option value="none" id="party-picker-none">(SELECT A PARTY)</option>
+        {{#each parties}} {{>partyOption}} {{/each}}
+        <option value="new">Create a new party...</option>
+    </select>
 
-        <div class="builder-label outline">Creating New Monster</div>
+    <div class="monster-maker panel">
+        <div class="builder-label outline">MAKE A MONSTER</div>
         <div class="part-picker-box">
             <div class="part-picker">
                 <button class="part-picker-left cycle-button" id="eye-prev">&lt;</button>
@@ -45,17 +45,37 @@
         <button class="scene-picker-left scene-picker cycle-button">&gt;</button>
         <div class="party-management-panel">
             <div class="party-management-group">
-                {{!-- <p><a href="#" class="party-link party-edit" data-index='0' id='party-edit-0'>EDIT</a></p> --}}
-                <p><a href="#" class="party-link party-retire" data-index='0' id='party-retire-0'>RETIRE</a></p>
+                {{!--
+                <p>
+                    <a href="#" class="party-link party-edit" data-index='0' id='party-edit-0'>EDIT</a>
+                </p> --}}
+                <p>
+                    <a href="#" class="party-link party-retire" data-index='0' id='party-retire-0'>RETIRE</a>
+                </p>
             </div><div class="party-management-group">
-                {{!-- <p><a href="#" class="party-link party-edit" data-index='1' id='party-edit-1'>EDIT</a></p> --}}
-                <p><a href="#" class="party-link party-retire" data-index='1' id='party-retire-1'>RETIRE</a></p>
+                {{!--
+                <p>
+                    <a href="#" class="party-link party-edit" data-index='1' id='party-edit-1'>EDIT</a>
+                </p> --}}
+                <p>
+                    <a href="#" class="party-link party-retire" data-index='1' id='party-retire-1'>RETIRE</a>
+                </p>
             </div><div class="party-management-group">
-                {{!-- <p><a href="#" class="party-link party-edit" data-index='2' id='party-edit-2'>EDIT</a></p> --}}
-                <p><a href="#" class="party-link party-retire" data-index='2' id='party-retire-2'>RETIRE</a></p>
+                {{!--
+                <p>
+                    <a href="#" class="party-link party-edit" data-index='2' id='party-edit-2'>EDIT</a>
+                </p> --}}
+                <p>
+                    <a href="#" class="party-link party-retire" data-index='2' id='party-retire-2'>RETIRE</a>
+                </p>
             </div><div class="party-management-group">
-                {{!-- <p><a href="#" class="party-link party-edit" data-index='3' id='party-edit-3'>EDIT</a></p> --}}
-                <p><a href="#" class="party-link party-retire" data-index='3' id='party-retire-3'>RETIRE</a></p>
+                {{!--
+                <p>
+                    <a href="#" class="party-link party-edit" data-index='3' id='party-edit-3'>EDIT</a>
+                </p> --}}
+                <p>
+                    <a href="#" class="party-link party-retire" data-index='3' id='party-retire-3'>RETIRE</a>
+                </p>
             </div>
         </div>
     </div>
@@ -73,11 +93,12 @@
 
     <div class="modal-content modal-content-error">
         <p id="modal-error-message">AN ERROR OCCURRED.</p>
-            <button type="submit" class='cycle-button' id='error-ok'>OK</button>
+        <button type="submit" class='cycle-button' id='error-ok'>OK</button>
         </form>
     </div>
 </div>
 
 <script>
+    var currentPartyId = {{ currentParty }};
     var partyData = {{{ toJSON monsters }}};
 </script>

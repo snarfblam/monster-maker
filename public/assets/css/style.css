@@ -218,6 +218,7 @@ body {
     padding-top: 10px;
     font-size: 0.5rem;
     margin: 0 auto;
+    white-space: nowrap;
 }
 
 .party-management-group {

@@ -40,12 +40,13 @@ var monster = {
 
     /** Returns a boolean indicating whether the object is a valid monster. */
     validate: function (monster, requireId) {
+        var result = true;
         var properties = ['head', 'body', 'eyes', 'partyId', 'name', 'active'];
         properties.forEach(p => {
-            if (!monser.hasOwnProperty(p)) return false;
+            if (!monster.hasOwnProperty(p)) result = false;
         });
 
-        return true;
+        return result;
     }
 }
 

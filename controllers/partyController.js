@@ -46,7 +46,7 @@ router.get('/', function (req, res) {
         });
 
         res.render('index', {
-            currentParty: partyId,
+            currentParty: partyId || null,
             parties: partyList,
             monsters: partyMonsterData.monsters,
         });
@@ -77,9 +77,10 @@ router.post('/api/monster/', function (req, res) {
     }
 
     // Get party info to ensure party hasn't exceeded limit
-    party.getWithMonsters().then(data => {
-        var count = data.monsters.length;
-        if (count >= 4) {
+    party.getWithMonsters(monsterData.partyId).then(data => {
+        //var count = data.monsters.length;
+        var active = data.monsters.filter(m => m.active);
+        if (active.length >= 4) {
             res.json(results.error_atCapacity);
         } else {
             monster.create(monsterData).then(function () {
