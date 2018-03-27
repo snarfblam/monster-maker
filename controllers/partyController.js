@@ -6,7 +6,13 @@ var router = express.Router();
 
 
 var results = {
-    added: { result: 'added' },
+    added: function (id) {
+        var result = { result: added };
+        if (id !== undefined) {
+            result.id = id;
+        }
+    },
+    // added: { result: 'added' },
     updated: { result: 'updated' },
     error_invalid: { result: 'error', error: 'invalid data' },
     error_runtime: { result: 'error', error: 'runtime error' },
@@ -15,6 +21,8 @@ var results = {
 
 router.get('/', function (req, res) {
     var partyId = null;
+    if (req.query.party) partyId = req.query.party;
+    // Todo: handle invalid party ID
 
     // get party list and pre-render sample (or whatever the first may be) party
     var partyList;
@@ -44,7 +52,6 @@ router.get('/', function (req, res) {
     }).catch(err => {
         console.log("ERROR RENDERING INDEX: ", err);
         res.render('error');
-        // error response here (or 200 with there-was-a-problem notification)
     });
 });
 
@@ -75,7 +82,7 @@ router.post('/api/monster/', function (req, res) {
             res.json(results.error_atCapacity);
         } else {
             monster.create(monsterData).then(function () {
-                res.json(results.added);
+                res.json(results.added());
             });
         }
     }).catch(err => {
@@ -103,15 +110,15 @@ router.post('/api/monster/:id', function (req, res) {
 });
 
 /** API endpoint to create a new party */
-router.post('/api/party', function (req, res) {
+router.post('/api/createparty', function (req, res) {
     var newData = req.body;
-    if (!party.validate(newDAta, false)) {
+    if (!party.validate(newData, false)) {
         res.json(results.error_invalid);
         return;
     }
 
     party.create(newData).then(result => {
-        res.json(results.added);
+        res.json(results.added(result.id));
     }).catch(err => {
         console.log(err);
         res.json(results.error_runtime);

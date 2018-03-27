@@ -481,8 +481,17 @@ function displayPartyData() {
         updateBuilder();
     });
 
+    $('.party-picker').on('change', function () {
+        var id = $('.party-picker').val();
+        if (id == 'new') {
+
+        } else {
+            location.href = '/?party=' + id;
+        }
+    })
+
     $('.builder-submit').on('click', function () {
-        var monster = app.builder.monsterToEdit;
+        var monster = {}; //app.builder.monsterToEdit;
         monster.head = app.builder.head;
         monster.body = app.builder.body;
         monster.eyes = app.builder.eyes;
