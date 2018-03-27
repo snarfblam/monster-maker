@@ -7,10 +7,11 @@ var router = express.Router();
 
 var results = {
     added: function (id) {
-        var result = { result: added };
+        var result = { result: 'added' };
         if (id !== undefined) {
             result.id = id;
         }
+        return result;
     },
     // added: { result: 'added' },
     updated: { result: 'updated' },

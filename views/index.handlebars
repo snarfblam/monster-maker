@@ -59,6 +59,24 @@
         </div>
     </div>
 </div>
+
+<div class="modal">
+    <div class="modal-content modal-content-new-party">
+        <p id="modal-content-new-party-title">ENTER YOUR PARTY NAME</p>
+        <form>
+            <input id='party-name-input'>
+            <button type='button' class='cycle-button' id='party-name-cancel'>CANCEL</button>
+            <button type="submit" class='cycle-button' id='party-name-submit'>SUBMIT</button>
+        </form>
+    </div>
+
+    <div class="modal-content modal-content-error">
+        <p id="modal-error-message">AN ERROR OCCURRED.</p>
+            <button type="submit" class='cycle-button' id='error-ok'>OK</button>
+        </form>
+    </div>
+</div>
+
 <script>
     var partyData = {{{ toJSON monsters }}};
 </script>

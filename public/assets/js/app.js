@@ -428,7 +428,22 @@ function displayPartyData() {
     // }
 }
 
+function displayModal(modalSelector) {
+    var $modal = $('.modal');
+    $modal.children().each(function () {
+        $(this).hide();
+    })
 
+    $(modalSelector).show();
+    $modal.show();
+
+    $(document.body).addClass('fixed');
+}
+
+function hideModal() {
+    $('.modal').hide();
+    $(document.body).removeClass('fixed');
+}
 
 { // Event handlers
     $('#eye-prev').on('click', function () {
@@ -484,11 +499,55 @@ function displayPartyData() {
     $('.party-picker').on('change', function () {
         var id = $('.party-picker').val();
         if (id == 'new') {
-
+            displayModal('.modal-content-new-party');
         } else {
             location.href = '/?party=' + id;
         }
-    })
+    });
+
+    $(document).on("click", "select option", function () {
+        
+    });
+
+
+    $('#party-name-submit').on('click', function (e) {
+        e.preventDefault();
+
+        var name = $('#party-name-input').val().trim();
+        if (name) {
+            $.ajax({
+                url: '/api/createparty',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    name: name,
+                    habitat: 0
+                })
+            }).then(function (response) {
+                if (response.id) {
+                    location.href = '/?party=' + response.id;
+                } else if (response.error) {
+                    $('#modal-error-message').text("AN ERROR OCCURED.");
+                    displayModal('.modal-content-error');
+                }
+            }).catch(function (err) {
+                $('#modal-error-message').text("AN ERROR OCCURED.");
+                displayModal('.modal-content-error');
+            })
+        } else {
+            $('#modal-content-new-party-title').text("PLEASE ENTER A NAME");
+        }
+
+
+    });
+
+    $('#party-name-cancel').on('click', function () {
+        hideModal();
+    });
+
+    $('#error-ok').on('click', function () {
+        hideModal();
+    });
 
     $('.builder-submit').on('click', function () {
         var monster = {}; //app.builder.monsterToEdit;
