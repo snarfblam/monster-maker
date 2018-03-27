@@ -500,9 +500,13 @@ function hideModal() {
         var id = $('.party-picker').val();
         if (id == 'new') {
             displayModal('.modal-content-new-party');
+        } else if (id == 'none') {
+            // nothing
         } else {
             location.href = '/?party=' + id;
         }
+
+        $('.party-picker').val('none');
     });
 
     $(document).on("click", "select option", function () {

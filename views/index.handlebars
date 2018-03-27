@@ -2,6 +2,7 @@
 
     <div class="monster-maker panel">
         <select class="party-picker">
+            <option value="none" id="party-picker-none">(SELECT A PARTY)</option>
             {{#each parties}} {{>partyOption}} {{/each}}
             <option value="new">Create a new party...</option>
         </select>
