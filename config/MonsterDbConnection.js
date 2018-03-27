@@ -35,21 +35,23 @@ function MonsterDbConnection() {
 
         return new Promise(function (resolve, reject) {
             if (values) {
-                self.connection.query(queryString, values, function (err, result) {
+                var query = self.connection.query(queryString, values, function (err, result) {
                     if (err) {
                         reject(err);
                     } else {
                         resolve(result);
                     }
                 });
+                console.log(query.sql);
             } else {
-                self.connection.query(queryString, function (err, result) {
+                var query = self.connection.query(queryString, function (err, result) {
                     if (err) {
                         reject(err);
                     } else {
                         resolve(result);
                     }
                 });
+                console.log(query.sql);
             }
         });
     };

@@ -17,9 +17,9 @@ var party = {
     },
 
     /** Returns a promise that resolves to {party, monsters[]}, or undefined if not found. */
-    getWithMonsters: function (id, excludeInactive) {
+    getWithMonsters: function (id) {
         var query = orm.select(
-            'partyId',
+            orm.as('parties.id', 'partyId'),
             'head',
             'body',
             'eyes',
@@ -29,11 +29,9 @@ var party = {
             'habitat',
             orm.as('parties.name', 'partyName'))
             .from('parties')
-            .innerJoin('monsters')
-            .onEquals('monsters.partyID', 'parties.id');
-        if (excludeInactive) {
-            query.whereEquals('active', 1);
-        }
+            .leftJoin('monsters')
+            .onEquals('monsters.partyID', 'parties.id')
+            .whereEquals('parties.id', id);
         
         return query.then(data => {
             if (data.length == 0) return undefined;
