@@ -164,19 +164,35 @@ body {
     padding-left: 50px;
     padding-right: 50px;
 }
-.builder-submit:disabled {
+.cycle-button:disabled {
     color: rgba(255, 255, 255, 0.2);
 }
-.builder-submit:hover:disabled {
+.cycle-button:hover:disabled {
     border-color: rgba(255, 255, 255, 0.3);
 }
 
-.builder-label,
-.preview-label {
+.panel-label {
     width: 100%;
     text-align: center;
     margin-top: 0.5em;
     margin-bottom: 0.5em;
+    text-transform: uppercase;
+}
+
+.retired-list {
+    height: 160px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
+.retired-monster-box {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    top: 20px;
+    display: inline-block;
+    margin: 0;
 }
 
 .party-picker {
@@ -204,6 +220,20 @@ body {
     display: inline-block;
     position: relative;
 }
+
+/* .party-habitat-1 {
+    background: url('../mon-habitat/cave.png');
+}
+.party-habitat-1 {
+    background: url('../mon-habitat/forest.png');
+}
+.party-habitat-1 {
+    background: url('../mon-habitat/plains.png');
+}
+.party-habitat-1 {
+    background: url('../mon-habitat/water-ruins.png');
+} */
+
 .party-scene .party-backdrop {
     border: 2px solid white;
     outline: 2px solid black;
@@ -240,6 +270,16 @@ body {
 .party-retire {
     color: red;
 } */
+.retire-button {
+    border: none;
+    background: none;
+    text-decoration: underline;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+    width: 80px;
+    display: inline-block;
+}
 
 .party-link.hidden {
     display: none;
@@ -258,20 +298,25 @@ body {
 }
 
 .monster-1 {
-    left: 0px;
+    left: -50px;
 }
 .monster-2 {
-    left: 80px;
+    left: 30px;
 }
 .monster-3 {
-    left: 160px;
+    left: 110px;
 }
 .monster-4 {
-    left: 240px;
+    left: 190px;
 }
 
 .monster-container {
     position: relative;
+}
+
+.builder-monster-view .monster-container {
+    /* left: 40px; */
+    top: 50px;
 }
 
 .party-monster .monster-container {
@@ -319,6 +364,14 @@ body {
 #party-name-input {
     display:block;
     margin: 1rem auto;
+}
+
+.retired-party-box {
+    width: 980px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1rem;
+    padding: 10px;
 }
 
 body.fixed {

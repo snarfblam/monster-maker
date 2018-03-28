@@ -7,33 +7,33 @@
     </select>
 
     <div class="monster-maker panel">
-        <div class="builder-label outline">MAKE A MONSTER</div>
+        <div class="panel-label outline">MAKE A MONSTER</div>
         <div class="part-picker-box">
             <div class="part-picker">
                 <button class="part-picker-left cycle-button" id="eye-prev">&lt;</button>
-                <div class="part-picker-label outline">Eyes</div>
+                <div class="part-picker-label outline">EYES</div>
                 <button class="part-picker-right cycle-button" id="eye-next">&gt;</button>
             </div>
             <div class="part-picker">
                 <button class="part-picker-left cycle-button" id="head-prev">&lt;</button>
-                <div class="part-picker-label outline">Head</div>
+                <div class="part-picker-label outline">HEAD</div>
                 <button class="part-picker-right cycle-button" id="head-next">&gt;</button>
             </div>
             <div class="part-picker">
                 <button class="part-picker-left cycle-button" id="body-prev">&lt;</button>
-                <div class="part-picker-label outline">Body</div>
+                <div class="part-picker-label outline">BODY</div>
                 <button class="part-picker-right cycle-button" id="body-next">&gt;</button>
             </div>
         </div>
         <div class="builder-preview">
             <div class="builder-monster-view"></div>
-            <div class="builder-monster-view-label">Name Here</div>
+            {{!-- <div class="builder-monster-view-label">Name Here</div> --}}
         </div>
         <button class="builder-submit cycle-button">CREATE</button>
     </div>
 
     <div class="party-view-box panel">
-        <div class='preview-label'>Your Party</div>
+        <div class='panel-label' id='party-label'>Your Party</div>
         <button class="scene-picker-left scene-picker cycle-button">&lt;</button>
         <div class='party-scene'>
             <img src='/assets/mon-habitat/plains.png' class='party-backdrop'>
@@ -49,36 +49,45 @@
                 <p>
                     <a href="#" class="party-link party-edit" data-index='0' id='party-edit-0'>EDIT</a>
                 </p> --}}
-                <p>
-                    <a href="#" class="party-link party-retire" data-index='0' id='party-retire-0'>RETIRE</a>
-                </p>
+                {{!-- <p> --}}
+                    <button class="party-link party-retire retire-button" data-index='0' id='party-retire-0'>RETIRE</button>
+                    {{!-- <a href="#" class="party-link party-retire" data-index='0' id='party-retire-0'>RETIRE</a> --}}
+                {{!-- </p> --}}
             </div><div class="party-management-group">
                 {{!--
                 <p>
                     <a href="#" class="party-link party-edit" data-index='1' id='party-edit-1'>EDIT</a>
                 </p> --}}
-                <p>
-                    <a href="#" class="party-link party-retire" data-index='1' id='party-retire-1'>RETIRE</a>
-                </p>
+                {{!-- <p> --}}
+                    <button class="party-link party-retire retire-button" data-index='1' id='party-retire-1'>RETIRE</button>
+                    {{!-- <a href="#" class="party-link party-retire" data-index='1' id='party-retire-1'>RETIRE</a> --}}
+                {{!-- </p> --}}
             </div><div class="party-management-group">
                 {{!--
                 <p>
                     <a href="#" class="party-link party-edit" data-index='2' id='party-edit-2'>EDIT</a>
                 </p> --}}
-                <p>
-                    <a href="#" class="party-link party-retire" data-index='2' id='party-retire-2'>RETIRE</a>
-                </p>
+                {{!-- <p> --}}
+                    <button class="party-link party-retire retire-button" data-index='2' id='party-retire-2'>RETIRE</button>
+                    {{!-- <a href="#" class="party-link party-retire" data-index='2' id='party-retire-2'>RETIRE</a> --}}
+                {{!-- </p> --}}
             </div><div class="party-management-group">
                 {{!--
                 <p>
                     <a href="#" class="party-link party-edit" data-index='3' id='party-edit-3'>EDIT</a>
                 </p> --}}
-                <p>
-                    <a href="#" class="party-link party-retire" data-index='3' id='party-retire-3'>RETIRE</a>
-                </p>
+                {{!-- <p> --}}
+                    <button class="party-link party-retire retire-button" data-index='3' id='party-retire-3'>RETIRE</button>
+                    {{!-- <a href="#" class="party-link party-retire" data-index='3' id='party-retire-3'>RETIRE</a> --}}
+                {{!-- </p> --}}
             </div>
         </div>
     </div>
+
+    <div class="retired-party-box panel">
+        <p class='panel-label'>RETIRED PARTY MEMBERS</p>
+        <div class='retired-list'></div>
+    </div>    
 </div>
 
 <div class="modal">
@@ -101,4 +110,5 @@
 <script>
     var currentPartyId = {{ currentParty }};
     var partyData = {{{ toJSON monsters }}};
+    var partyList = {{{ toJSON parties}}};
 </script>

@@ -127,4 +127,20 @@ router.post('/api/createparty', function (req, res) {
     });
 });
 
+router.post('/api/party/:id', function (req, res) {
+    var newData = req.body;
+    newData.id = req.params.id;
+    if (!party.validate(newData)) { 
+        res.json(results.error_invalid);
+        return;
+    }
+
+    party.update(newData).then(result => {
+        res.json(results.updated);
+    }).catch(err => {
+        console.log(err);
+        res.json(results.error_runtime);
+    });
+})
+
 module.exports = router;

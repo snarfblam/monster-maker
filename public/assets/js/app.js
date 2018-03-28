@@ -16,6 +16,14 @@ var app = new (function () {
     function point(x, y) {
         return { x: x, y: y };
     }
+
+    this.habitats = [
+        "/assets/mon-habitat/cave.png",
+        "/assets/mon-habitat/forest.png",
+        "/assets/mon-habitat/plains.png",
+        "/assets/mon-habitat/water-ruins.png",
+    ];
+
     this.bodies = [
         {
             image: "body-bear.png",
@@ -296,16 +304,20 @@ var app = new (function () {
         var $eye1Element = $container.find('.monster-eye-1');  //$(eye1Element);
         var $eye2Element = $container.find('.monster-eye-2');  //$(eye2Element);
 
-        var offsetX = (bodyPart.mount.x - headPart.anchor.x);
-        var offsetY = (bodyPart.mount.y - headPart.anchor.y);
+        offsetX = 100 - bodyPart.anchor.x;
+        offsetY = 100 - bodyPart.anchor.y;
 
         $bodyElement.css({
-            left: 0,
-            top: 0,
+            left: offsetX + 'px',
+            top: offsetY + 'px',
         });
+
+        offsetX += (bodyPart.mount.x - headPart.anchor.x);
+        offsetY += (bodyPart.mount.y - headPart.anchor.y);
+
         $headElement.css({
-            left: offsetX,
-            top: offsetY,
+            left: offsetX + 'px',
+            top: offsetY + 'px',
         });
         $headElement.attr('src', imgDir + headPart.image);
         $bodyElement.attr('src', imgDir + bodyPart.image);
@@ -331,8 +343,8 @@ var app = new (function () {
         offsetY1 = offsetY + (eyeMounts[0].y - eye1.anchor.y);
         // eye 1
         $eye1Element.css({
-            left: offsetX1,
-            top: offsetY1,
+            left: offsetX1 + 'px',
+            top: offsetY1 + 'px',
         });
         $eye1Element.attr('src', imgDir + eye1.image)
         if (eye2) {
@@ -341,8 +353,8 @@ var app = new (function () {
 
             $eye2Element.css({
                 display: "inline",
-                left: offsetX2,
-                top: offsetY2,
+                left: offsetX2 + 'px',
+                top: offsetY2 + 'px',
             });
             $eye2Element.attr('src', imgDir + eye2.image)
         } else {
@@ -377,8 +389,42 @@ partyMemberUi.forEach(function (item, index) {
     item.element.append(item.container);
 });
 
+var currentParty = null;
+partyList.forEach(function (party) {
+    if (party.id == currentPartyId) currentParty = party;
+});
+
+var partyName = "(not found)";
+var partyHabitat = 0;
+if (currentParty) {
+    partyName = currentParty.name || partyName;
+    partyHabitat = currentParty.habitat || partyHabitat;
+}
+// partyList.forEach(function (party) {
+//     if (party.id == currentPartyId) {
+//         partyName = party.name;
+//         partyHabitat = party.habitat;
+//     }
+// });
+$('#party-label').text(partyName);
+
+$('.party-backdrop').attr('src', app.habitats[partyHabitat] || app.habitats[0]);
+
+
 displayPartyData();
 updateBuilder();
+
+// Render retired party members
+partyData.forEach(function (monster) {
+    if (!monster.active) {
+        var holder = $('<div>').addClass('retired-monster-box');
+        var contents = app.createMonsterContainer();
+        holder.append(contents);
+        app.updateMonsterContainer(contents, monster);
+
+        $('.retired-list').append(holder);
+    }
+});
 
 
 function updateBuilder() {
@@ -387,8 +433,11 @@ function updateBuilder() {
     var submit = $('.builder-submit');
 
     if (app.builder.mode == 'create') {
-        submit.prop('disabled', app.partyInfo.activeMemberCount >= 4);
-        submit.text('CREATE');
+        var partyFull = app.partyInfo.activeMemberCount >= 4;
+        submit.prop('disabled', partyFull);
+        submit.text(partyFull ? '(PARTY IS FULL)' : 'CREATE');
+        $('.part-picker-left').prop('disabled', partyFull);
+        $('.part-picker-right').prop('disabled', partyFull);
     } else if (app.builder.mode == 'edit') {
         submit.prop('disabled', false);
         submit.text('UPDATE');
@@ -401,7 +450,7 @@ function displayPartyData() {
     app.partyInfo.activeMemberCount = 0;
 
     if (partyData && partyData.forEach) {
-        partyData.forEach(monster => {
+        partyData.forEach(function(monster) {
             if (monster.active) {
                 if (iContainer < 4) {
                     app.updateMonsterContainer(partyMemberUi[iContainer].container, monster);
@@ -443,6 +492,32 @@ function displayModal(modalSelector) {
 function hideModal() {
     $('.modal').hide();
     $(document.body).removeClass('fixed');
+}
+
+function changePartyHabitat(habitat) {
+
+
+    if (!currentParty) return;
+
+    currentParty.habitat = habitat;
+    $.ajax({
+        url: '/api/party/' + currentParty.id,
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(currentParty),
+    }).then(function (response) {
+        if (response.error) {
+            $('#modal-error-message').text("There was an error: " + response.error);
+            displayModal('.modal-content-error');
+            console.error(response);
+        } else {
+            location.reload();
+        }
+    }).catch(function (err) {
+        console.log(err);
+        $('#modal-error-message').text("There was an error: " + response.error);
+        displayModal('.modal-content-error');
+    });
 }
 
 { // Event handlers
@@ -561,7 +636,7 @@ function hideModal() {
             active: 1,
             partyId: currentPartyId,
             name: "Joshua",
-        }; 
+        };
 
         $.ajax({
             url: '/api/monster',
@@ -572,7 +647,7 @@ function hideModal() {
                 $('#modal-error-message').text("There was an error: " + response.error);
                 displayModal('.modal-content-error');
                 console.error(response);
-        } else {
+            } else {
                 location.reload();
             }
         }).catch(function (err) {
@@ -580,5 +655,43 @@ function hideModal() {
             $('#modal-error-message').text("There was an error: " + response.error);
             displayModal('.modal-content-error');
         });
+    });
+
+    $('.party-retire').on('click', function () {
+        var index = parseInt($(this).attr('data-index'));
+        var uiStuff = partyMemberUi[index];
+        var monster = uiStuff.monster;
+
+        if (monster && monster.id) {
+            monster.active = 0;
+
+            $.ajax({
+                url: '/api/monster/' + monster.id,
+                method: 'POST',
+                data: monster,
+            }).then(function (response) {
+                if (response.error) {
+                    $('#modal-error-message').text("There was an error: " + response.error);
+                    displayModal('.modal-content-error');
+                    console.error(response);
+                } else {
+                    location.reload();
+                }
+            }).catch(function (err) {
+                console.log(err);
+                $('#modal-error-message').text("There was an error: " + response.error);
+                displayModal('.modal-content-error');
+            });
+        }
+    });
+
+    $('.scene-picker-left').on('click', function () {
+        var habitat = (partyHabitat == 0) ? 3 : partyHabitat - 1;
+        changePartyHabitat(habitat);
+    });
+
+    $('.scene-picker-right').on('click', function () {
+        var habitat = (partyHabitat == 3) ? 0 : partyHabitat + 1;
+        changePartyHabitat(habitat);
     });
 }
