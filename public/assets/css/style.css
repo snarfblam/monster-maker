@@ -219,6 +219,7 @@ body {
 .party-scene {
     display: inline-block;
     position: relative;
+    /* overflow: hidden; */
 }
 
 /* .party-habitat-1 {
@@ -294,7 +295,7 @@ body {
     width: 80px;
     height: 100px;
     position: absolute;
-    top: 140px;
+    top: 150px;
 }
 
 .monster-1 {

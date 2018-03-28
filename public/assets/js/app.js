@@ -416,7 +416,7 @@ updateBuilder();
 
 // Render retired party members
 partyData.forEach(function (monster) {
-    if (!monster.active) {
+    if (monster.id && !monster.active) { // moster must exist and be inactive
         var holder = $('<div>').addClass('retired-monster-box');
         var contents = app.createMonsterContainer();
         holder.append(contents);

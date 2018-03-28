@@ -1,4 +1,5 @@
-CREATE DATABASE IF NOT EXISTS monsters_db;
+DROP DATABASE IF EXISTS monsters_db;
+CREATE DATABASE monsters_db;
 USE monsters_db;
 
 CREATE TABLE IF NOT EXISTS `monsters` (
