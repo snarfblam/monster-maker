@@ -2,7 +2,12 @@ var mysql = require('mysql');
 var connectionConfig = require('./monsterDbConfig');
 
 function MonsterDbConnection() {
-    this.connection = mysql.createConnection(connectionConfig);
+    var jaws = process.env.JAWSDB_URL;
+    if (jaws) {
+        this.connection = mysql.createConnection(jaws);
+    } else {
+        this.connection = mysql.createConnection(connectionConfig);
+    }
 
     this.connected = false;
 } { // methods
