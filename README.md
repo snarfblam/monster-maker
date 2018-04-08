@@ -1,9 +1,9 @@
 # monster-maker
 Simple app to make and manage a party of monsters
 
-## ORM
+## Query Object.
 
-The `config/orm.js` file contains the ORM used to access the database. The ORM object provides the following methods which may be chained to create queries.
+The `config/orm.js` file contains the ORM used to access the database. The ORM object provides the following methods which may be chained to create queries in a fluid syntax.
 
 * `.select(col1, col2, ... colN)` - Overload. Specifies the columns to select.
 * `.select(colArray)` - Overload. Specifies the columns to select.
