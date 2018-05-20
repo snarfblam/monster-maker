@@ -5,7 +5,7 @@ Monster Maker allows a user to create monsters by piecing together monster parts
 
 ## How It Works
 
-Monster Maker runs on an Express server. It uses the Handlebars templating engine to render pages and jQuery for dynamic content. MySQL is used for storage using a custom fluid syntax that wraps the `mysql` NPM package.
+Monster Maker runs on an Express server. It uses the Handlebars templating engine to render pages and jQuery for dynamic content. MySQL is used for storage using a custom fluid syntax that wraps the `mysql` NPM package. The demo is deployed to Heroku using JawsDB as a MySQL provider.
 
 ## Query Object
 
