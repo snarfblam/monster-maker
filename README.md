@@ -1,9 +1,15 @@
 # monster-maker
-Simple app to make and manage a party of monsters
+Monster Maker allows a user to create monsters by piecing together monster parts. Piece monsters together and manage a collection of moster parties.
 
-## Query Object.
+[Live Demo](https://serene-chamber-64503.herokuapp.com/)
 
-The `config/orm.js` file contains the ORM used to access the database. The ORM object provides the following methods which may be chained to create queries in a fluid syntax.
+## How It Works
+
+Monster Maker runs on an Express server. It uses the Handlebars templating engine to render pages and jQuery for dynamic content. MySQL is used for storage using a custom fluid syntax that wraps the `mysql` NPM package.
+
+## Query Object
+
+The `config/orm.js` file contains a wrapper around the mysql package. It object provides the following methods which may be chained to create queries in a fluid syntax. This provides a simple, discoverable means of safely constructing queries.
 
 * `.select(col1, col2, ... colN)` - Overload. Specifies the columns to select.
 * `.select(colArray)` - Overload. Specifies the columns to select.
@@ -32,7 +38,7 @@ Column and table references can also be created using the following methods of t
 ```javascript
 // Very basic:
 //    SELECT * FROM books
-orm.select().from('books').then(data => console.log(data));
+query.select().from('books').then(data => console.log(data));
 
 // A little more involved:
 //    SELECT 
