@@ -22,19 +22,19 @@ The `config/orm.js` file contains a wrapper around the mysql package. It object 
 * `.innerJoin(table)` - Performs an inner join on the specified table
 * `.onEquals(col1, col2)` - Specifies an ON clause that specifies two columns be equal
 * `.run()` - Compiles and submits a query and returns a promise that will resolve with the query response.
-* `.then(cbSuccess, cbFailure)` - Convenience wrapper for `orm.run().then()`.
+* `.then(cbSuccess, cbFailure)` - Convenience wrapper for `query.run().then()`.
 ### Specifying Tables And Columns
 
 A table or column may be specified as a simple string where context allows. Column names may take the format of `"columnName"` or `"tableName.columnName"`. The dotted names will be properly separated and escaped.
 
-Column and table references can also be created using the following methods of the ORM object.
+Column and table references can also be created using the following methods of the Query object.
 
 * `.col(name)` - Creates a reference to a column. The `"tableName.columnName"` form is allowed.
 * `.col(name).as(alias)` - Creates a reference to a column using an alias.
 * `.table(name)` - Creates a reference to a table.
 * `.table(name).col(name)` - Creates a reference to a column.
 * `.table(name).col(name).as(alias)` - Creates a reference to a column using an alias.
-* `.as(col, alias)` - Convenince wrapper for `orm.col().as()`. Creates a reference to a column using an alias. The `"tableName.columnName"` form is allowed.
+* `.as(col, alias)` - Convenince wrapper for `query.col().as()`. Creates a reference to a column using an alias. The `"tableName.columnName"` form is allowed.
 
 ### Sample Usage
 
@@ -57,7 +57,7 @@ var query = orm.select([
         content.col('year'),
         content.col('genre'),
         content.col('name').as('contentName'),
-        orm.col('publishers.name').as('publisherName')
+        query.col('publishers.name').as('publisherName')
 ])  .from('publishers')
     .innerJoin(content)
     .onEquals(content.col('publisherId'), 'publishers.id')
