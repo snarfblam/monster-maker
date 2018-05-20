@@ -1,4 +1,7 @@
 # monster-maker
+
+![Monster Maker](mon.png)
+
 Monster Maker allows a user to create monsters by piecing together monster parts. Piece monsters together and manage a collection of moster parties.
 
 [Live Demo](https://serene-chamber-64503.herokuapp.com/)
