@@ -52,8 +52,8 @@ query.select().from('books').then(data => console.log(data));
 //    FROM `publishers`
 //    INNER JOIN
 //      ON `game`.`publisherId` = `publishers`.`id`
-var content = orm.table('games'); // Could be books, films, etc.
-var query = orm.select([
+var content = query.table('games'); // Could be books, films, etc.
+query.select([
         content.col('year'),
         content.col('genre'),
         content.col('name').as('contentName'),
